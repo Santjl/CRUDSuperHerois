@@ -19,7 +19,9 @@ namespace CRUDSuperHeroisAPI
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true);
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
+
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();

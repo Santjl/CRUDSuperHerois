@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using CRUDSuperHeroisAPI.Domain.Models;
+
 
 namespace CRUDSuperHeroisAPI.Data
 {
@@ -7,6 +9,14 @@ namespace CRUDSuperHeroisAPI.Data
     {
         public SuperHeroisContext(DbContextOptions<SuperHeroisContext> options) : base(options) { }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
+        public DbSet<Herois> Herois { get; set; }
+        public DbSet<Superpoderes> Superpoderes { get; set; }
+        public DbSet<HeroisSuperpoderes> HeroisSuperpoderes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);

@@ -4,7 +4,7 @@ using System;
 
 namespace CRUDSuperHeroisAPI.Data.UoW
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private readonly SuperHeroisContext _context;
         private IDbContextTransaction _transactionScope;
