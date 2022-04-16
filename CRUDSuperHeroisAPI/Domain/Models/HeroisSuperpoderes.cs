@@ -6,5 +6,11 @@
         public virtual Herois Herois { get; set;}
         public int SuperpoderId { get; set; }
         public virtual Superpoderes Superpoderes { get; set; }
+
+        public HeroisSuperpoderes(int heroiId, int superpoderId)
+        {
+            HeroiId = heroiId;
+            SuperpoderId = superpoderId;
+        }
     }
 }

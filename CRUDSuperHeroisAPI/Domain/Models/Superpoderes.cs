@@ -8,5 +8,11 @@ namespace CRUDSuperHeroisAPI.Domain.Models
         public string Superpoder { get; private set; }
         public string Descricao { get; private set; }
         public virtual ICollection<HeroisSuperpoderes> HeroisSuperpoderes { get; private set; }
+
+        public Superpoderes(string superpoder, string descricao)
+        {
+            Superpoder = superpoder;
+            Descricao = descricao;
+        }
     }
 }
