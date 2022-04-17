@@ -25,13 +25,13 @@ namespace CRUDSuperHeroisAPI.Controllers
         }
 
         [HttpGet]
-        [Route(nameof(HeroisSuperpoderesController.BuscarHeroisSuperpoderes))]
-        public async Task<dynamic> BuscarHeroisSuperpoderes(int heroiId)
+        [Route(nameof(HeroisSuperpoderesController.BuscarHeroiSuperpoderes))]
+        public async Task<dynamic> BuscarHeroiSuperpoderes(int heroiId)
         {
             try
             {
                 var heroisSuperpoderes = _heroisSuperpoderesRepository
-                    .BuscarHeroisSuperpoder(heroiId);
+                    .BuscarHeroiSuperpoder(heroiId);
                 if(heroisSuperpoderes != null) return ResponseGet(heroisSuperpoderes);
                 throw new Exception();
             }
@@ -69,6 +69,23 @@ namespace CRUDSuperHeroisAPI.Controllers
                     "Não foi possível associar os superpoderes a este herói:"
                     + e.Message);
                 return ResponseGet();
+            }
+        }
+
+        [HttpDelete]
+        [Route(nameof(HeroisSuperpoderesController.DesassociarHeroiSuperpoder))]
+        public async Task<dynamic> DesassociarHeroiSuperpoder(int heroiId, int superpoderesId)
+        {
+            try
+            {
+                _heroisSuperpoderesRepository.DesassociarHeroiSuperpoder(heroiId, superpoderesId);
+                return ResponseDelete();
+            }
+            catch(Exception e)
+            {
+                _notificationService.AdicionarNotificacao(
+                    "Não foi possível desassociar o herói ao superpoder: " + e.Message);
+                return ResponseDelete();
             }
         }
     }

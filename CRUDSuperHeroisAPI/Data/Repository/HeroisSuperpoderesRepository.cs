@@ -30,7 +30,7 @@ namespace CRUDSuperHeroisAPI.Data.Repository
             SaveChanges();
         }
 
-        public HeroisSuperpoderesDTO BuscarHeroisSuperpoder(int heroiId)
+        public HeroisSuperpoderesDTO BuscarHeroiSuperpoder(int heroiId)
         {
             var heroiSuperpoder = Db.HeroisSuperpoderes
                 .Where(x => x.HeroiId == heroiId)

@@ -102,16 +102,16 @@ namespace CRUDSuperHeroisAPI.Controllers
 
         [HttpPut]
         [Route(nameof(HeroisController.AtualizarHeroi))]
-        public async Task<dynamic> AtualizarHeroi(int heroidId, [FromBody] AtualizarHerois atualizarHeroi)
+        public async Task<dynamic> AtualizarHeroi([FromBody] AtualizarHerois atualizarHeroi)
         {
             try
             {
-                var heroi = _heroisRepository.AtualizarHeroi(heroidId, 
-                    atualizarHeroi.Nome, 
+                var heroi = _heroisRepository.AtualizarHeroi(atualizarHeroi.HeroiId,
+                    atualizarHeroi.Nome,
                     atualizarHeroi.NomeHeroi,
                     (double)atualizarHeroi.Altura,
                     (double)atualizarHeroi.Peso
-                    );
+                    ) ;
                 if(heroi != null)
                 {
                     return ResponsePut(heroi);

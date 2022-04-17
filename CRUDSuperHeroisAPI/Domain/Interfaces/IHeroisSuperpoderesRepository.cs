@@ -7,6 +7,6 @@ namespace CRUDSuperHeroisAPI.Domain.Interfaces
     {
         void AssociarHeroiSuperpoder(int heroiId, int superpoderId);
         void DesassociarHeroiSuperpoder(int heroidId, int superpoderId);
-        HeroisSuperpoderesDTO BuscarHeroisSuperpoder(int heroiId);
+        HeroisSuperpoderesDTO BuscarHeroiSuperpoder(int heroiId);
     }
 }

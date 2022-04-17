@@ -65,7 +65,7 @@ namespace CRUDSuperHeroisAPI.Data.Repository
 
         }
 
-        public Herois AtualizarHeroi(int heroiId, string nome, string nomeHeroi,
+        public HeroisDTO AtualizarHeroi(int heroiId, string nome, string nomeHeroi,
             double altura, double peso)
         {
             var heroi = Db.Herois.Where(h => h.Id == heroiId).FirstOrDefault();
@@ -77,7 +77,15 @@ namespace CRUDSuperHeroisAPI.Data.Repository
 
             SaveChanges();
 
-            return Db.Herois.Where(h => h.Id == heroiId).FirstOrDefault();
+            return Db.Herois.Where(h => h.Id == heroiId).Select(h => new HeroisDTO
+            {
+                Id = h.Id,
+                Nome = h.Nome,
+                NomeHeroi = h.NomeHeroi,
+                DataNascimento = h.DataNascimento,
+                Altura = h.Altura,
+                Peso = h.Peso,
+            }).FirstOrDefault();
 
         }
 
