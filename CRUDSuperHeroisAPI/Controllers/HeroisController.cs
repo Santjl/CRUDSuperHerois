@@ -107,7 +107,9 @@ namespace CRUDSuperHeroisAPI.Controllers
             try
             {
                 var heroi = _heroisRepository.AtualizarHeroi(atualizarHeroi.HeroiId,
+
                     atualizarHeroi.Nome,
+                    atualizarHeroi.DataNascimento,
                     atualizarHeroi.NomeHeroi,
                     (double)atualizarHeroi.Altura,
                     (double)atualizarHeroi.Peso

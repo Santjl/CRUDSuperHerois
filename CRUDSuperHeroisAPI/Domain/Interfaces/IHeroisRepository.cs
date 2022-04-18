@@ -12,7 +12,7 @@ namespace CRUDSuperHeroisAPI.Domain.Interfaces
         Herois AdicionarHeroi(string nome, string nomeHeroi, DateTime dataNascimento,
             double altura, double peso);
         void DeletarHeroi(int heroiId);
-        HeroisDTO AtualizarHeroi(int heroiId, string nome, string nomeHeroi,
+        HeroisDTO AtualizarHeroi(int heroiId, string nome, DateTime dataNascimento, string nomeHeroi,
             double altura, double peso);
         HeroisDTO BuscarHeroiPorNomeHeroi(string nome);
         HeroisDTO BuscarHeroiPorNome(string nome);

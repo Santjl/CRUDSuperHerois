@@ -97,13 +97,14 @@ namespace CRUDSuperHeroisAPI.Data.Repository
 
         }
 
-        public HeroisDTO AtualizarHeroi(int heroiId, string nome, string nomeHeroi,
+        public HeroisDTO AtualizarHeroi(int heroiId, string nome, DateTime dataNascimento, string nomeHeroi,
             double altura, double peso)
         {
             var heroi = Db.Herois.Where(h => h.Id == heroiId).FirstOrDefault();
 
             if (nome != "") heroi.Nome = nome;
             if(nomeHeroi != "") heroi.NomeHeroi = nomeHeroi;
+            if (DateTime.Now > dataNascimento) heroi.DataNascimento = dataNascimento;
             if(altura != 0) heroi.Altura = (double)altura;
             if(peso != 0) heroi.Peso = (double)peso;
 

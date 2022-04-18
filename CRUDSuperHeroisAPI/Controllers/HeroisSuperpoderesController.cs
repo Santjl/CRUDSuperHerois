@@ -3,6 +3,7 @@ using CRUDSuperHeroisAPI.Domain.Interfaces;
 using CRUDSuperHeroisAPI.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CRUDSuperHeroisAPI.Controllers
@@ -111,6 +112,7 @@ namespace CRUDSuperHeroisAPI.Controllers
                     _notificationService.AdicionarNotificacao("Já existe um herói com esse nome de herói.");
                     return ResponsePost("");
                 }
+                _unitOfWork.CriarTransacao();
                 var adicionarHeroi = _heroisRepository.AdicionarHeroi(heroi.Nome, heroi.NomeHeroi, heroi.DataNascimento, heroi.Altura, heroi.Peso);
                 if (adicionarHeroi == null) throw new Exception();
                 var superpoderes = heroi.Superpoderes;
@@ -129,14 +131,141 @@ namespace CRUDSuperHeroisAPI.Controllers
                     }
                 }
 
+                _unitOfWork.CommitComTransacao();
+
                 return ResponsePost("");
             }
             catch (Exception e)
             {
-                _notificationService.AdicionarNotificacao("Não foi possível adicionar o herói e seus superpoderes: "
-                    + e.Message);
+                _notificationService.AdicionarNotificacao("Não foi possível adicionar o herói e seus superpoderes.");
                 return ResponsePost("");
             }
+        }
+        
+        [HttpPut]
+        [Route(nameof(HeroisSuperpoderesController.AtualizarHeroiSuperpoderes))]
+        public async Task<dynamic> AtualizarHeroiSuperpoderes([FromBody] AtualizarHeroiSuperpoderes heroi)
+        {
+            try
+            {
+                if (heroi == null) throw new Exception();
+                var heroiExiste = _heroisRepository.BuscarHeroiPorId(heroi.Id);
+                if (heroiExiste == null)
+                {
+                    _notificationService.AdicionarNotificacao("Não foi possível encontrar o herói para atualizar.");
+                    return ResponsePut();
+                }
+                var heroiAtualizado = _heroisRepository.AtualizarHeroi(heroi.Id, heroi.Nome, heroi.DataNascimento, heroi.NomeHeroi, heroi.Altura, heroi.Peso);
+                if (heroiAtualizado == null) throw new Exception();
+                var superpoderesParaAssociar = heroi.Superpoderes;
+                var heroiSuperpoderes = _heroisSuperpoderesRepository.BuscarHeroiSuperpoder(heroi.Id);
+                if (heroiSuperpoderes != null)
+                {
+                    var superpoderesAssociados = heroiSuperpoderes.Superpoderes;
+                    if (heroiSuperpoderes == null) throw new Exception();
+                    _unitOfWork.CriarTransacao();
+                    //verifica se há necessidade e associa superpoder ao herói
+                    foreach (var superpoder in superpoderesParaAssociar)
+                    {
+                        bool verificaNecessidadeAssociar = !superpoderesAssociados.Any(x =>
+                            x.Id == superpoder.Id
+                        );
+                        if (verificaNecessidadeAssociar)
+                        {
+                            var superpoderExiste = _superpoderesRepository.BuscarSuperpoderPorNome(superpoder.Superpoder);
+                            if (superpoderExiste == null)
+                            {
+                                var superpoderAdicionado = _superpoderesRepository.AdicionarSuperpoder(superpoder.Superpoder, superpoder.Descricao);
+                                if (superpoderAdicionado == null) throw new Exception();
+                                _heroisSuperpoderesRepository.AssociarHeroiSuperpoder(heroi.Id, superpoderAdicionado.Id);
+                            }
+                            else
+                            {
+                                _heroisSuperpoderesRepository.AssociarHeroiSuperpoder(heroi.Id, superpoderExiste.Id);
+                            }
+                        }
+                    }
+
+                    //verifica se há necessidade e remove associação do superpoder do herói
+                    foreach (var superpoder in superpoderesAssociados)
+                    {
+                        bool desassociarSuperpoder = !superpoderesParaAssociar.Any(x =>
+                        x.Id == superpoder.Id
+                        );
+
+                        if (desassociarSuperpoder)
+                        {
+                            _heroisSuperpoderesRepository.DesassociarHeroiSuperpoder(heroi.Id, superpoder.Id);
+                        }
+                    }
+                    _unitOfWork.CommitComTransacao();
+                }
+                else
+                {
+                    foreach (var superpoder in superpoderesParaAssociar)
+                    {
+                        var superpoderExiste = _superpoderesRepository.BuscarSuperpoderPorNome(superpoder.Superpoder);
+                        if (superpoderExiste == null)
+                        {
+                            var superpoderAdicionado = _superpoderesRepository.AdicionarSuperpoder(superpoder.Superpoder, superpoder.Descricao);
+                            if (superpoderAdicionado == null) throw new Exception();
+                            _heroisSuperpoderesRepository.AssociarHeroiSuperpoder(heroi.Id, superpoderAdicionado.Id);
+                        }
+                        else
+                        {
+                            _heroisSuperpoderesRepository.AssociarHeroiSuperpoder(heroi.Id, superpoderExiste.Id);
+                        }
+                    }
+                }
+            
+                return ResponsePut();
+            }
+            catch (Exception e)
+            {
+                _notificationService.AdicionarNotificacao("Não foi possível atualizar o herói e seus superpoderes.");
+                return ResponsePut();
+            }
+        }
+
+        [HttpDelete]
+        [Route(nameof(HeroisSuperpoderesController.ExcluirHeroiSuperpoderes))]
+        public async Task<dynamic> ExcluirHeroiSuperpoderes(int heroiId)
+        {
+            try
+            {
+                var buscarHeroiExistente = _heroisRepository.BuscarHeroiPorId(heroiId);
+                if(buscarHeroiExistente == null) throw new Exception();
+                var heroiSuperpoderes = _heroisSuperpoderesRepository.BuscarHeroiSuperpoder(heroiId);
+                if(heroiSuperpoderes != null)
+                {
+                    var superpoderes = heroiSuperpoderes.Superpoderes;
+                    if (superpoderes != null)
+                    {
+                        _unitOfWork.CriarTransacao();
+                        foreach(var superpoder in superpoderes)
+                        {
+                            _heroisSuperpoderesRepository.DesassociarHeroiSuperpoder(heroiId, superpoder.Id);
+                        }
+                        _heroisRepository.DeletarHeroi(heroiId);
+                        _unitOfWork.CommitComTransacao();
+                    }
+                }
+                else
+                {
+                    _unitOfWork.CriarTransacao();
+                    _heroisRepository.DeletarHeroi(heroiId);
+                    _unitOfWork.CommitComTransacao();
+                }
+
+                return ResponseDelete();
+            }
+            catch(Exception ex)
+            {
+                _notificationService.AdicionarNotificacao("Houve um erro na tentativa de deletar o registro do herói. Tente novamente.");
+                return ResponseDelete();
+            }
+
+
         }
     }
 }
