@@ -1,9 +1,9 @@
 # CRUDSuperHerois
-API CRUD de Super Heróis.
+API CRUD de Super Heróis em .NET Core 5.0 com Banco de Dados SQL Server.
 
-<h2>
-  Explicação da API  
-</h2>
+
+#  Explicação da API  
+
 <h3>
 Organização do Projeto  
 </h3>
