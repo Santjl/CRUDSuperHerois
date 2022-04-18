@@ -1,5 +1,5 @@
 # CRUDSuperHerois
-API CRUD de Super Heróis em .NET Core 5.0 com Banco de Dados SQL Server.
+API CRUD de Super Heróis em .NET Core 5.0 com Banco de Dados SQL Server. Se ao rodar o projeto, não abrir com o swagger, por favor, coloque "swagger/index.html" na URL.
 
 
 #  Explicação da API  
