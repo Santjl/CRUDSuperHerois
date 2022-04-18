@@ -38,6 +38,18 @@ namespace CRUDSuperHeroisAPI.Data.Repository
             return superpoder;
 
         }
+        public SuperpoderesDTO BuscarSuperpoderPorNome(string nome)
+        {
+            var superpoder = Db.Superpoderes.Where(s => s.Superpoder == nome).Select(s => new SuperpoderesDTO
+            {
+                Id = s.Id,
+                Superpoder = s.Superpoder,
+                Descricao = s.Descricao,
+            }).FirstOrDefault();
+
+            return superpoder;
+
+        }
 
         public void DeletarSuperpoder(int id)
         {
@@ -46,11 +58,13 @@ namespace CRUDSuperHeroisAPI.Data.Repository
             SaveChanges();
         }
 
-        public void AdicionarSuperpoder(string superpoder, string descricao)
+        public Superpoderes AdicionarSuperpoder(string superpoder, string descricao)
         {
             var novoSuperpoder = new Superpoderes(superpoder, descricao);
             Add(novoSuperpoder);
             SaveChanges();
+
+            return novoSuperpoder;
         }
     }
 }

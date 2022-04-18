@@ -14,5 +14,7 @@ namespace CRUDSuperHeroisAPI.Domain.Interfaces
         void DeletarHeroi(int heroiId);
         HeroisDTO AtualizarHeroi(int heroiId, string nome, string nomeHeroi,
             double altura, double peso);
+        HeroisDTO BuscarHeroiPorNomeHeroi(string nome);
+        HeroisDTO BuscarHeroiPorNome(string nome);
     }
 }

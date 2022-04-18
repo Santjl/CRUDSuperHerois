@@ -45,6 +45,38 @@ namespace CRUDSuperHeroisAPI.Data.Repository
                             
             return heroi;
         }
+        public HeroisDTO BuscarHeroiPorNome(string nome)
+        {
+            var heroi = Db.Herois
+                .Where(h => h.Nome == nome)
+                .Select(h => new HeroisDTO
+                {
+                    Id = h.Id,
+                    Nome = h.Nome,
+                    NomeHeroi = h.NomeHeroi,
+                    DataNascimento = h.DataNascimento,
+                    Altura = h.Altura,
+                    Peso = h.Peso,
+                }).FirstOrDefault();
+                            
+            return heroi;
+        }
+        public HeroisDTO BuscarHeroiPorNomeHeroi(string nome)
+        {
+            var heroi = Db.Herois
+                .Where(h => h.NomeHeroi == nome)
+                .Select(h => new HeroisDTO
+                {
+                    Id = h.Id,
+                    Nome = h.Nome,
+                    NomeHeroi = h.NomeHeroi,
+                    DataNascimento = h.DataNascimento,
+                    Altura = h.Altura,
+                    Peso = h.Peso,
+                }).FirstOrDefault();
+                            
+            return heroi;
+        }
 
         public Herois AdicionarHeroi(string nome, string nomeHeroi, DateTime dataNascimento, 
             Double altura, Double peso)

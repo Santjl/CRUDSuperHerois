@@ -9,6 +9,7 @@ namespace CRUDSuperHeroisAPI.Domain.Interfaces
         IEnumerable<SuperpoderesDTO> BuscarSuperpoderes();
         SuperpoderesDTO BuscarSuperpoder(int id);
         void DeletarSuperpoder(int id);
-        void AdicionarSuperpoder(string superpoder, string descricao);
+        Superpoderes AdicionarSuperpoder(string superpoder, string descricao);
+        SuperpoderesDTO BuscarSuperpoderPorNome(string nome);
     }
 }
